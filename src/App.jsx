@@ -1,5 +1,7 @@
+import { useCallback, useState } from 'react';
 import SiteHeader from './components/SiteHeader.jsx';
 import SiteFooter from './components/SiteFooter.jsx';
+import PrismLoader from './components/PrismLoader.jsx';
 import Hero from './sections/Hero.jsx';
 import Belief from './sections/Belief.jsx';
 import Services from './sections/Services.jsx';
@@ -10,20 +12,30 @@ import Newsletter from './sections/Newsletter.jsx';
 import Contact from './sections/Contact.jsx';
 
 export default function App() {
+  const [siteReady, setSiteReady] = useState(false);
+  const revealSite = useCallback(() => setSiteReady(true), []);
+
   return (
     <>
-      <SiteHeader />
-      <main id="main">
-        <Hero />
-        <Belief />
-        <Services />
-        <Process />
-        <Packages />
-        <About />
-        <Newsletter />
-        <Contact />
-      </main>
-      <SiteFooter />
+      <PrismLoader onComplete={revealSite} />
+      <div
+        className={`site-shell${siteReady ? ' site-shell-ready' : ''}`}
+        aria-hidden={!siteReady}
+        inert={!siteReady}
+      >
+        <SiteHeader />
+        <main id="main">
+          <Hero />
+          <Belief />
+          <Services />
+          <Process />
+          <Packages />
+          <About />
+          <Newsletter />
+          <Contact />
+        </main>
+        <SiteFooter />
+      </div>
     </>
   );
 }
